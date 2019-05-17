@@ -3,8 +3,6 @@ package main
 import (
 	"net/http"
 
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,15 +13,9 @@ func setupRouter() *gin.Engine {
 
 	r := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
 	r.GET("/address/:address", func(c *gin.Context) {
 		address := c.Params.ByName("address")
 		value, ok := dbByAddress[address]
-
-		fmt.Print(value)
 
 		if ok {
 			c.JSON(http.StatusOK, gin.H{"address": address, "contract": value})
