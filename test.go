@@ -8,6 +8,8 @@ import (
 
 var dbByAddress = make(map[string]string)
 var dbByContract = make(map[string]string)
+var hotByContract = make(map[string]int)
+var coldByContract = make(map[string]int)
 
 func setupRouter() *gin.Engine {
 
@@ -29,7 +31,9 @@ func setupRouter() *gin.Engine {
 		value, ok := dbByContract[contract]
 
 		if ok {
-			c.JSON(http.StatusOK, gin.H{"contract": contract, "address": value})
+			hot := hotByContract[contract]
+			cold := coldByContract[contract]
+			c.JSON(http.StatusOK, gin.H{"contract": contract, "address": value, "hot": hot, "cold": cold})
 		} else {
 			c.JSON(http.StatusNotFound, gin.H{"contract": contract, "address": "no-value"})
 		}
@@ -42,11 +46,17 @@ func setupRouter() *gin.Engine {
 func main() {
 
 	//Быдлокод
-	dbByAddress["Партизанская 40"] = "10000"
-	dbByAddress["Комсомольский 10"] = "20000"
+	dbByAddress["Партизанская 40"] = "12345"
+	dbByAddress["Комсомольский 10"] = "34567"
 
-	dbByContract["20000"] = "Комсомольский 10"
-	dbByContract["10000"] = "Партизанская 40"
+	dbByContract["34567"] = "Комсомольский 10"
+	dbByContract["12345"] = "Партизанская 40"
+
+	hotByContract["12345"] = 10
+	hotByContract["34567"] = 20
+
+	coldByContract["12345"] = 35
+	coldByContract["34567"] = 32
 
 	r := setupRouter()
 	// Listen and Server in 0.0.0.0:8080

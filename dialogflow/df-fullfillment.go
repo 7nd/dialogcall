@@ -27,7 +27,7 @@ func setupRouter() *gin.Engine {
 		logrus.Info("Required Action is + " + dfAction)
 
 		for k := range dfFields {
-			logrus.Info("key[%s] value[%s]\n", k, dfFields[k])
+			logrus.Info(k, "  ", dfFields[k])
 		}
 
 	})
